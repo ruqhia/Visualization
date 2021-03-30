@@ -25,9 +25,9 @@ def say_hello_world():
     target_historic = np.array(data["latent_historic_interp"])
     target = np.array(data["target_historic_interp"])
     #original
-    # result=(1-weight)*contour_std+weight*contour_mean
+    result=(1-weight)*contour_std+weight*contour_mean
     #Sharp's ratio
-    result=((1-weight)*contour_std)/(weight*contour_mean)
+    # result=((1-weight)*contour_std)/(weight*contour_mean)
     F=result.reshape(-1,1).tolist()
     npnts = 100
     x = np.linspace(0,1,npnts)
