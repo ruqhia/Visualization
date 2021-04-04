@@ -9,11 +9,11 @@ import requests
 app = Flask(__name__)
 CORS(app)
 api_path = "/api"
+import matplotlib.pyplot as plt
 
 
-
-@app.route(f"{api_path}/hello", methods=["POST"])
-def say_hello_world():
+@app.route(f"{api_path}/heatmap", methods=["POST"])
+def heatMap():
     weight =  request.get_json(force=True).get("weight")
     print(weight)
     with open('data.json') as f: 
@@ -51,38 +51,61 @@ def say_hello_world():
 
 
 
-import matplotlib.pyplot as plt
-with open('data.json') as f: 
-    data = f.read() 
-data = json.loads(data)
 
-contour_mean = np.array(data["contour_mean"])
-contour_std  = np.array(data["contour_std"])
-target_historic = np.array(data["latent_historic_interp"])
+@app.route(f"{api_path}/scatter", methods=["GET"])
+def scatter():
+    with open('data.json') as f: 
+        data = f.read() 
+    data = json.loads(data)
 
-npnts = 100
-x = np.linspace(0,1,npnts)
-x1, x2 = np.meshgrid(x,x) 
+    contour_mean = (np.array(data["contour_mean"]).reshape(-1,1)).tolist()
+    contour_std  = (np.array(data["contour_std"]).reshape(-1,1)).tolist()
 
-plt.figure()
-plt.contour(x1, x2, contour_mean, 30)
-plt.plot(target_historic[:,0], target_historic[:,1], '.', color='black')
 
-plt.figure()
-plt.contour(x1, x2, contour_std, 30)
-plt.plot(target_historic[:,0], target_historic[:,1], '.', color='black')
+    data2 = []
+    k=0
 
-contour_mean = np.reshape(contour_mean,[-1,1])
-contour_std = np.reshape(contour_std,[-1,1])
-
-plt.figure()
-plt.plot(contour_mean, contour_std, '.', color='red')
-plt.xlabel('reward')
-plt.ylabel('risk')
+    for i in range(0,10000):
+        datasmall= [None]*2
+        datasmall[0]=round(contour_mean[i][0],5)
+        datasmall[1]=round(contour_std[i][0],5)
+        data2.append(datasmall)
+    print(data2)
+    return(json.dumps(data2))
 
 
 
-plt.show()
+# with open('data.json') as f: 
+#     data = f.read() 
+# data = json.loads(data)
+
+# contour_mean = np.array(data["contour_mean"])
+# contour_std  = np.array(data["contour_std"])
+# target_historic = np.array(data["latent_historic_interp"])
+
+# npnts = 100
+# x = np.linspace(0,1,npnts)
+# x1, x2 = np.meshgrid(x,x) 
+
+# plt.figure()
+# plt.contour(x1, x2, contour_mean, 30)
+# plt.plot(target_historic[:,0], target_historic[:,1], '.', color='black')
+
+# plt.figure()
+# plt.contour(x1, x2, contour_std, 30)
+# plt.plot(target_historic[:,0], target_historic[:,1], '.', color='black')
+
+# contour_mean = np.reshape(contour_mean,[-1,1])
+# contour_std = np.reshape(contour_std,[-1,1])
+
+# plt.figure()
+# plt.plot(contour_mean, contour_std, '.', color='red')
+# plt.xlabel('reward')
+# plt.ylabel('risk')
+
+
+
+# plt.show()
 
 
 

@@ -8,7 +8,7 @@ import G2 from '@antv/g-canvas';
 
  
   const data = { weight:.1 };
-  fetch('http://localhost:5000/api/hello', {
+  fetch('http://localhost:5000/api/heatmap', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json',

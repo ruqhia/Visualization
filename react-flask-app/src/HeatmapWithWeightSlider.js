@@ -8,7 +8,7 @@ import G2 from '@antv/g-canvas';
 
  
   const data = { weight:.1 };
-  fetch('http://localhost:5000/api/hello', {
+  fetch('http://localhost:5000/api/heatmap', {
     method: 'POST', // or 'PUT'
     headers: {
       'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ import G2 from '@antv/g-canvas';
       if(weight<0)
         weight=0;
       const data2 = {weight:weight};
-      fetch('http://localhost:5000/api/hello', {
+      fetch('http://localhost:5000/api/heatMap', {
         method: 'POST', // or 'PUT'
     
         headers: {
@@ -148,64 +148,8 @@ import G2 from '@antv/g-canvas';
 
   });
 
-  registerInteraction('slider2', {
-    start: [{ trigger: 'plot:click', 
-    
-    action: context => {
-      fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/scatter.json')
-      .then(res => res.json())
-      .then(data => {
-        const chart = new Chart({
-          container: 'c1',
-          autoFit: false,
-          height: 500,
-          width: 500
-        });
-        // 数据格式： [{"gender":"female","height":161.2,"weight":51.6}]
-        chart.data(data);
-        chart.scale({
-          height: { nice: true },
-          weight: { nice: true },
-        });
-        chart.tooltip({
-          showTitle: false,
-          showCrosshairs: true,
-          crosshairs: {
-            type: 'xy',
-          },
-          itemTpl: '<li class="g2-tooltip-list-item" data-index={index} style="margin-bottom:4px;">'
-            + '<span style="background-color:{color};" class="g2-tooltip-marker"></span>'
-            + '{name}<br/>'
-            + '{value}'
-            + '</li>'
-        });
-        chart
-          .point()
-          .position('height*weight')
-          .color('gender')
-          .shape('circle')
-          .tooltip('gender*height*weight', (gender, height, weight) => {
-            return {
-              name: gender,
-              value: height + '(cm), ' + weight + '(kg)'
-            };
-          })
-          .style({
-            fillOpacity: 0.85
-          });
-        chart.interaction('legend-highlight');
-        chart.render();
-      });
-      
-    },
-    }],
-
-  });
-  chart.tooltip({
-    showMarkers: true,
-  });
+  
   chart.interaction('slider');
-  chart.interaction('slider2');
   chart
   .point()
   .position('xVal*yVal')
