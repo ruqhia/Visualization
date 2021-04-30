@@ -54,26 +54,94 @@ def heatMap():
 
 @app.route(f"{api_path}/scatter", methods=["GET"])
 def scatter():
-    with open('data.json') as f: 
+    with open('dataDecisions.json') as f: 
         data = f.read() 
     data = json.loads(data)
 
     contour_mean = (np.array(data["contour_mean"]).reshape(-1,1)).tolist()
     contour_std  = (np.array(data["contour_std"]).reshape(-1,1)).tolist()
-
+  
+    reward_actual= np.array(data["target_historic_interp_predicted_mean"])
+    risk_pred =  np.array(data["target_historic_interp_predicted_std"])
 
     data2 = []
-    k=0
+    # Sample data points
+    for i in range(0,len(contour_mean)):
+        new = {
+            "plotType":"Samples",
+            "Reward": round(contour_mean[i][0],5),
+            "Risk": round(contour_std[i][0],5)
+        }
+        data2.append(new)
+    # Historical predictions
+    for i in range(0,len(reward_actual)):
+        new = {
+            "plotType":"Historic Prediction",
+            "Reward": round(reward_actual[i][0],5),
+            "Risk": round(risk_pred[i][0],5)
+        }
+        data2.append(new)         
+    # Decisions
+    k=1
+    for i in range(np.shape(data["decisions_reward"])[0]):
+        reward = data["decisions_reward"][i]
+        risk = data["decisions_risk"][i]
+        for j in range(len(reward)):
+            new = {
+                "plotType":"Decisions"+str(k),
+                "Reward": round(reward[j],5),
+                "Risk": round(risk[j],5)
+            }
+            data2.append(new) 
+        k=k+1
 
-    for i in range(0,10000):
-        datasmall= [None]*2
-        datasmall[0]=round(contour_mean[i][0],5)
-        datasmall[1]=round(contour_std[i][0],5)
-        data2.append(datasmall)
-    print(data2)
     return(json.dumps(data2))
 
+@app.route(f"{api_path}/radar", methods=["GET"])
+def radarMean():
+    with open('data_sensitivity.json') as f: 
+        data = f.read() 
+    data = json.loads(data)
 
+    sens_list = np.array(data["ordered_label_list"])
+    sens_mean  = np.array(data["sensitivity_result_mean"])
+    sens_std = np.array(data["sensitivity_result_std"])
+    minMean = min(sens_mean)
+    minIndex =np.where(sens_std==sens_std.min())
+    maxMean = max(sens_mean)
+    maxIndex =np.where(sens_std==sens_std.max())
+    minVal = round(minMean-sens_std[minIndex][0]-.03,5)
+    maxVal = round(maxMean+sens_std[maxIndex][0],5)
+    print(minVal)
+    data2 = []
+    data2.append(minVal)
+    data2.append(maxVal)
+    dataMean=[]
+    dataMeanPlusDev=[]
+    dataMeanMinusDev=[]
+    for i in range(0,len(sens_mean)):
+        new = {
+            "item":sens_list[i],
+            "Mean": round(sens_mean[i],5),
+        }
+        dataMean.append(new)
+    data2.append(dataMean)
+   
+    for i in range(0,len(sens_mean)):
+        new = {
+            "item":sens_list[i],
+            "Mean+Deviation":  round(sens_mean[i]+sens_std[i],5),
+        }
+        dataMeanPlusDev.append(new)
+    data2.append(dataMeanPlusDev)
+    for i in range(0,len(sens_mean)):
+        new = {
+            "item":sens_list[i],
+            "Mean-Deviation": round(sens_mean[i]-sens_std[i],5)
+        }
+        dataMeanMinusDev.append(new)
+    data2.append(dataMeanMinusDev)
+    return(json.dumps(data2))
 
 # with open('data.json') as f: 
 #     data = f.read() 
