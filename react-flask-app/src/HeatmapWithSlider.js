@@ -17,7 +17,7 @@ import G2 from '@antv/g-canvas';
   })
   .then((res) => res.json())
   .then(data => {
-    console.log('Success:', data);
+
   const source = data.map((arr) => {
     return {
       name: arr[0],

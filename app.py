@@ -99,26 +99,32 @@ def scatter():
 
 @app.route(f"{api_path}/radar", methods=["GET"])
 def radarMean():
+
+    # Data file
     with open('data_sensitivity.json') as f: 
         data = f.read() 
     data = json.loads(data)
-
+    # Data
     sens_list = np.array(data["ordered_label_list"])
     sens_mean  = np.array(data["sensitivity_result_mean"])
     sens_std = np.array(data["sensitivity_result_std"])
+
+    # Min and max axis readings
     minMean = min(sens_mean)
     minIndex =np.where(sens_std==sens_std.min())
     maxMean = max(sens_mean)
     maxIndex =np.where(sens_std==sens_std.max())
     minVal = round(minMean-sens_std[minIndex][0]-.03,5)
     maxVal = round(maxMean+sens_std[maxIndex][0],5)
-    print(minVal)
+
     data2 = []
     data2.append(minVal)
     data2.append(maxVal)
     dataMean=[]
     dataMeanPlusDev=[]
     dataMeanMinusDev=[]
+
+    # Mean data
     for i in range(0,len(sens_mean)):
         new = {
             "item":sens_list[i],
@@ -126,7 +132,8 @@ def radarMean():
         }
         dataMean.append(new)
     data2.append(dataMean)
-   
+
+    # Mean+Deviation data
     for i in range(0,len(sens_mean)):
         new = {
             "item":sens_list[i],
@@ -134,6 +141,8 @@ def radarMean():
         }
         dataMeanPlusDev.append(new)
     data2.append(dataMeanPlusDev)
+
+    # Mean-Deviation data
     for i in range(0,len(sens_mean)):
         new = {
             "item":sens_list[i],

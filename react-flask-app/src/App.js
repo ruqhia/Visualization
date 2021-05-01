@@ -3,8 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import {Scatter} from './Scatter';
 import {Radar} from './Radar';
-// import {HeatmapWithSlider} from './HeatmapWithSlider';
-// import {HeatmapWithWeightSlider} from './HeatmapWithWeightSlider';
+import {HeatmapWithSlider} from './HeatmapWithSlider';
+import {HeatmapWithWeightSlider} from './HeatmapWithWeightSlider';
 
 // import Loss from './loss'
 // import rewardLoss from './rewardLoss'

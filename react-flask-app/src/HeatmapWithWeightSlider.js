@@ -17,7 +17,7 @@ import G2 from '@antv/g-canvas';
   })
   .then((res) => res.json())
   .then(data => {
-    console.log('Success:', data);
+   
   const source = data.map((arr) => {
     return {
       name: arr[0],
@@ -103,14 +103,12 @@ import G2 from '@antv/g-canvas';
     start: [{ trigger: 'legend:valuechanged', 
     
     action: context => {
-      console.log("he");
+
     },
     }],
     end:[{trigger: 'legend:dragend',
     action: context => {
-      console.log("Hi")
       var weight=((context.getCurrentPoint()).x-150)/100;
-      console.log(weight);
       if(weight>1)
         weight=1;
       if(weight<0)
@@ -165,6 +163,3 @@ import G2 from '@antv/g-canvas';
   chart.render();
 });
 
-///register action
-//look at file for datafilter
-///register interaction

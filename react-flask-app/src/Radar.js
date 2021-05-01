@@ -23,6 +23,8 @@ fetch('http://localhost:5000/api/radar', {
       autoFit: true,
       height: 500,
     });    
+
+    //Plotting Mean+Deviation view
     const dv = new DataView().source(data[3]);
     dv.transform({
       type: 'fold',
@@ -33,7 +35,6 @@ fetch('http://localhost:5000/api/radar', {
     const v1 = chart.createView({
     
     });
-      
     v1.scale('score', {
       min: data[0],
       max: data[1],
@@ -82,30 +83,34 @@ fetch('http://localhost:5000/api/radar', {
         fillOpacity: 1,
       });
     v1
-        .area({
+     .area({
             startOnZero: false
         })
       .position('item*score')
       .color('user')
-      const dv3 = new DataView().source(data[2]);
-      dv3.transform({
-        type: 'fold',
-        fields: ['Mean'], // 展开字段集
-        key: 'user3', // key字段
-        value: 'score3', // value字段
-      });
+
+
+
+    // Plotting Mean view
+    const dv3 = new DataView().source(data[2]);
+    dv3.transform({
+      type: 'fold',
+      fields: ['Mean'], // 展开字段集
+      key: 'user3', // key字段
+      value: 'score3', // value字段
+    });
       const v3 = chart.createView({
       
       });
         
-      v3.scale('score3', {
-        min: data[0],
-        max: data[1],
-      });
-      v3.coordinate('polar', {
+    v3.scale('score3', {
+      min: data[0],
+      max: data[1],
+    });
+    v3.coordinate('polar', {
         radius: 0.8,
       });
-      v3.axis('item', {
+    v3.axis('item', {
         line: null,
         tickLine: null,
         grid: {
@@ -116,125 +121,128 @@ fetch('http://localhost:5000/api/radar', {
           },
         },
       });
-      v3.axis('score3', {
-        line: null,
-        tickLine: null,
-        grid: {
-          line: {
+    v3.axis('score3', {
+      line: null,
+      tickLine: null,
+      grid: {
+        line: {
             type: 'line',
             style: {
               lineDash: null,
             },
           },
         },
-      });
-      v3.data(dv3.rows);
-      v3
-        .line()
-        .position('item*score3')
-        .color('user3')
-        .size(2);
-      v3
-        .point()
-        .position('item*score3')
-        .color('user3')
-        .shape('circle')
-        .size(4)
-        .style({
-          stroke: '#fff',
-          lineWidth: 1,
-          fillOpacity: 1,
-        });
-      v3
-        .area({
+    });
+    v3.data(dv3.rows);
+    v3
+      .line()
+      .position('item*score3')
+      .color('user3')
+      .size(2);
+    v3
+      .point()
+      .position('item*score3')
+      .color('user3')
+      .shape('circle')
+      .size(4)
+      .style({
+        stroke: '#fff',
+        lineWidth: 1,
+        fillOpacity: 1,
+       });
+    v3
+      .area({
             startOnZero: false
-          })
-        .position('item*score3')
-        .color('user3')   
+        })
+      .position('item*score3')
+      .color('user3')   
 
-const dv2 = new DataView().source(data[4]);
-dv2.transform({
-  type: 'fold',
-  fields: ['Mean-Deviation'], // 展开字段集
-  key: 'user2', // key字段
-  value: 'score2', // value字段
-});
-const v2 = chart.createView({
 
-});
+    // Plotting Mean-Deviation
+    const dv2 = new DataView().source(data[4]);
+    dv2.transform({
+        type: 'fold',
+        fields: ['Mean-Deviation'], // 展开字段集
+        key: 'user2', // key字段
+        value: 'score2', // value字段
+    });
+    const v2 = chart.createView({
 
-v2.scale('score2', {
-  min: data[0],
-  max: data[1],
-});
-v2.coordinate('polar', {
-  radius: 0.8,
-});
-v2.axis('item', {
-  line: null,
-  tickLine: null,
-  grid: {
-    line: {
-      style: {
-        lineDash: null,
-      },
-    },
-  },
-});
-v2.axis('score2', {
-  line: null,
-  tickLine: null,
-  grid: {
-    line: {
-      type: 'line',
-      style: {
-        lineDash: null,
-      },
-    },
-  },
-});
-v2.data(dv2.rows);
-v2
-.area({
-    startOnZero: false
-  })
-  .position('item*score2')
-  .color('#fff')
-.style({
-    stroke: '#fff',
-    lineWidth: 1,
-    fillOpacity: .9,
-  });
-v2
-  .line()
-  .position('item*score2')
-  .color('user2')
-  .size(2);
-v2
-  .point()
-  .position('item*score2')
-  .color('user2')
-  .shape('circle')
-  .size(4)
-  .style({
-    stroke: '#fff',
-    lineWidth: 1,
-    fillOpacity: 1,
-  });
- 
+    });
 
-  chart.tooltip({
-    shared: true,
-    showCrosshairs: true,
-    crosshairs: {
-      line: {
+    v2.scale('score2', {
+        min: data[0],
+        max: data[1],
+    });
+    v2.coordinate('polar', {
+    radius: 0.8,
+    });
+
+    v2.axis('item', {
+    line: null,
+    tickLine: null,
+    grid: {
+        line: {
         style: {
-          lineDash: [4, 4],
-          stroke: '#333'
+            lineDash: null,
+        },
+        },
+    },
+    });
+    v2.axis('score2', {
+    line: null,
+    tickLine: null,
+    grid: {
+        line: {
+        type: 'line',
+        style: {
+            lineDash: null,
+        },
+        },
+    },
+    });
+    v2.data(dv2.rows);
+    v2
+      .area({
+        startOnZero: false
+      })
+      .position('item*score2')
+      .color('#fff')
+      .style({
+        stroke: '#fff',
+        lineWidth: 1,
+        fillOpacity: .9,
+      });
+    v2
+      .line()
+      .position('item*score2')
+      .color('user2')
+      .size(2);
+    v2
+      .point()
+      .position('item*score2')
+      .color('user2')
+      .shape('circle')
+      .size(4)
+      .style({
+        stroke: '#fff',
+        lineWidth: 1,
+        fillOpacity: 1,
+      });
+    
+
+    chart.tooltip({
+        shared: true,
+        showCrosshairs: true,
+        crosshairs: {
+        line: {
+            style: {
+            lineDash: [4, 4],
+            stroke: '#333'
+            }
         }
-      }
-    }
-  });
+        }
+    });
   
     
     chart.render();

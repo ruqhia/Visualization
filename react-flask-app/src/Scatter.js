@@ -60,7 +60,12 @@ fetch('http://localhost:5000/api/scatter', {
       .style({
         fillOpacity: 1
       });
-    chart.interaction('legend-active');
-    chart.interaction('brush');
+
+
+      // Storing the value when user clicks on graph
+      chart.on('element:click', (ev) => {
+        console.log(ev.data.data)
+        // to do something
+      });
     chart.render();
   });
